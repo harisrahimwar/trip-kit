@@ -6,12 +6,45 @@ type Stop = { id: string; date: string; time: string; title: string; place: stri
 export default function Itinerary() {
   const [stops, setStops] = useLocalStorage<Stop[]>("tk-itinerary", []);
   const [form, setForm] = useState({ date: "", time: "", title: "", place: "" });
+  const [scanMessage, setScanMessage] = useState("");
 
   const add = (e: FormEvent) => {
     e.preventDefault();
     if (!form.date || !form.title.trim()) return;
     setStops([...stops, { id: uid(), ...form, title: form.title.trim() }]);
     setForm({ ...form, time: "", title: "", place: "" });
+  };
+
+  const scanQRCode = async () => {
+    const cdSdk = (window as Window & {
+      cdsdk?: {
+        openQRCodeReader: (options?: { cameraPosition?: "front" | "back" | "external" }) => Promise<{
+          success: boolean;
+          data: { value: string | null | undefined; type?: string }[];
+        }>;
+      };
+    }).cdsdk;
+
+    if (!cdSdk?.openQRCodeReader) {
+      setScanMessage("QR scanning is only available in the Trip Kit app.");
+      return;
+    }
+
+    setScanMessage("Opening QR code reader...");
+    try {
+      const result = await cdSdk.openQRCodeReader({ cameraPosition: "back" });
+      if (!result.success) {
+        setScanMessage("QR scan was not successful.");
+        return;
+      }
+
+      const values = result.data
+        .map((item) => item.value)
+        .filter((value): value is string => typeof value === "string");
+      setScanMessage(values.length > 0 ? `Scanned: ${values.join(", ")}` : "No QR code data found.");
+    } catch (error) {
+      setScanMessage(`Unable to open QR code reader: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
   };
 
   const days = [...new Set(stops.map((s) => s.date))].sort();
@@ -25,6 +58,11 @@ export default function Itinerary() {
         <input className="field" placeholder="Where?" value={form.place} onChange={(e) => setForm({ ...form, place: e.target.value })} aria-label="Place" />
         <button className="btn">Add stop</button>
       </form>
+
+      <div>
+        <button type="button" className="btn" onClick={scanQRCode}>Scan QR code</button>
+        {scanMessage && <p className="mt-2 text-sm text-ink/70" role="status" aria-live="polite">{scanMessage}</p>}
+      </div>
 
       {days.length === 0 && <p className="text-ink/60">No stops yet. Pick a date and add your first activity.</p>}
 
