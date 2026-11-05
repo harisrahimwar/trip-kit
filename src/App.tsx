@@ -5,8 +5,9 @@ import Todos from "./features/Todos";
 import Holidays from "./features/Holidays";
 import Currency from "./features/Currency";
 import Outfits from "./features/Outfits";
+import Media from "./features/Media";
 
-const TABS = ["Itinerary", "To-do", "Holidays", "Currency", "Outfits"] as const;
+const TABS = ["Itinerary", "To-do", "Holidays", "Currency", "Outfits", "Media"] as const;
 type Tab = (typeof TABS)[number];
 const SWATCHES = ["#e8a317", "#1f7a74", "#c8553d", "#6d5bd0"];
 
@@ -60,6 +61,7 @@ export default function App() {
         {tab === "Holidays" && <Holidays />}
         {tab === "Currency" && <Currency key={s.home} home={s.home.length === 3 ? s.home : "MYR"} />}
         {tab === "Outfits" && <Outfits />}
+        {tab === "Media" && <Media />}
       </main>
     </div>
   );
