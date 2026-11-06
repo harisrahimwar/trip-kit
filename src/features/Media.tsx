@@ -11,11 +11,6 @@ export default function Media() {
           src="/media/tech-page-1.png"
           alt="Smartphone home screen shown on a phone"
         />
-        <h1 className="font-display text-lg font-semibold">
-          <a href="https://github.com/features/copilot/plans" target="_blank" rel="noreferrer">
-            Co-pilot plans
-          </a>
-        </h1>
         <img
           className="aspect-video w-full rounded-lg border border-yellow-300/40 object-cover"
           src="/media/tech-page-2.jpg"
@@ -26,6 +21,13 @@ export default function Media() {
           src="/media/tech-page-3.jpg"
           alt="Sports car on a racetrack"
         />
+      </div>
+      <div>
+        <h1 className="font-display text-lg font-semibold">
+          <a href="https://github.com/features/copilot/plans" target="_blank" rel="noreferrer">
+            Co-pilot plans
+          </a>
+        </h1>
       </div>
       <div className="aspect-video overflow-hidden rounded-lg border border-yellow-300/50 bg-blue-900">
         <iframe
