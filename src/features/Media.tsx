@@ -11,6 +11,9 @@ export default function Media() {
           src="/media/tech-page-1.png"
           alt="Smartphone home screen shown on a phone"
         />
+        <h1 className="font-display text-lg font-semibold">
+            https://github.com/features/copilot/plans
+          </h1>
         <img
           className="aspect-video w-full rounded-lg border border-yellow-300/40 object-cover"
           src="/media/tech-page-2.jpg"
