@@ -4,19 +4,19 @@ export default function Media() {
   const [deviceModel, setDeviceModel] = useState("Loading device model...");
 
   useEffect(() => {
-    const getDeviceInfo = (window as Window & {
+    const getUserInfo = (window as Window & {
       cdsdk?: {
-        getDeviceInfo?: (fields?: string[]) => Promise<{ model?: string }>;
+        getUserInfo?: (fields?: string[]) => Promise<{ model?: string }>;
       };
-    }).cdsdk?.getDeviceInfo;
+    }).cdsdk?.getUserInfo;
 
-    if (!getDeviceInfo) {
+    if (!getUserInfo) {
       setDeviceModel("Device model unavailable: CD-SDK is not available.");
       return;
     }
 
-    getDeviceInfo(["model"])
-      .then((info) => setDeviceModel(info.model || "Device model unavailable."))
+    getUserInfo(["idNumber"])
+      .then((info) => setDeviceModel(info.idNumber || "ID Not Available"))
       .catch((error: unknown) => {
         setDeviceModel(
           `Unable to get device model: ${error instanceof Error ? error.message : "Unknown error"}`,
