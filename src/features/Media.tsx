@@ -1,21 +1,31 @@
 import { useEffect, useState } from "react";
 
 export default function Media() {
-  const [deviceInfo, setDeviceInfo] = useState<string | null>(null);
+  const [userInfo, setUserInfo] = useState("Loading...");
 
-  cdsdk.getDeviceInfo()
-  .then((deviceInfo) => {
-    setDeviceInfo(deviceInfo.model ?? "Unavailable")
-  });
-  
+  useEffect(() => {
+    const getUserInfo = (window as Window & {
+      cdsdk?: { getUserInfo?: () => Promise<{ idNumber?: string }> };
+    }).cdsdk?.getUserInfo;
+
+    if (!getUserInfo) {
+      setUserInfo("Unavailable");
+      return;
+    }
+
+    getUserInfo()
+      .then((info) => setUserInfo(info.idNumber ?? "Unavailable"))
+      .catch(() => setUserInfo("Unable to load"));
+  }, []);
+
   return (
     <section className="space-y-5 rounded-2xl bg-blue-950 p-4 text-yellow-50 sm:p-6">
       <div>
-        <h2 className="font-display text-2xl font-boldgit  text-yellow-300">Tech page</h2>
+        <h2 className="font-display text-2xl font-bold text-yellow-300">Tech page</h2>
         <p className="mt-1 text-sm text-blue-100">Watch the video from YouTube.</p>
       </div>
       <p className="text-sm text-yellow-100" role="status" aria-live="polite">
-        Device model: {deviceInfo}
+        User ID: {userInfo}
       </p>
       <div className="grid gap-3 sm:grid-cols-3">
         <img
