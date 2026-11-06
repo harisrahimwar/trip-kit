@@ -15,11 +15,11 @@ export default function Media() {
       return;
     }
 
-    getUserInfo(["idNumber"])
-      .then((info) => setDeviceModel(info.idNumber || "ID Not Available"))
+    getUserInfo(["fullName"])
+      .then((info) => setDeviceModel(info.fullName || "ID Not Available"))
       .catch((error: unknown) => {
         setDeviceModel(
-          `Unable to get device model: ${error instanceof Error ? error.message : "Unknown error"}`,
+          `Unable to get id: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
       });
   }, []);
